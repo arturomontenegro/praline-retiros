@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Retiros Padre Hurtado — Dulcería Praliné</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #FBF7F2;
+    --brown: #3D2314;
+    --caramel: #C4813A;
+    --caramel-light: #F0D9BC;
+    --green: #2D6A4F;
+    --green-light: #D8F3DC;
+    --red: #C1121F;
+    --red-light: #FFE5E7;
+    --gray: #8A7E74;
+    --white: #FFFFFF;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--cream);
+    font-family: 'DM Sans', sans-serif;
+    min-height: 100vh;
+    color: var(--brown);
+  }
+
+  header {
+    background: var(--brown);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 2px 12px rgba(61,35,20,0.18);
+  }
+
+  .logo-circle {
+    width: 42px; height: 42px;
+    background: var(--caramel);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px; color: white;
+    flex-shrink: 0;
+  }
+
+  .header-text h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    color: var(--white);
+    line-height: 1.1;
+  }
+
+  .header-text p {
+    font-size: 12px;
+    color: var(--caramel-light);
+    margin-top: 2px;
+  }
+
+  .stats-bar {
+    background: var(--caramel);
+    padding: 12px 24px;
+    display: flex;
+    gap: 24px;
+  }
+
+  .stat {
+    text-align: center;
+  }
+
+  .stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--white);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    color: var(--caramel-light);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-top: 2px;
+  }
+
+  .content {
+    padding: 16px;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+
+  .date-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--caramel-light);
+    color: var(--brown);
+    font-size: 13px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 20px;
+    margin-bottom: 16px;
+  }
+
+  .pedido-card {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 8px rgba(61,35,20,0.07);
+    border: 1.5px solid transparent;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .pedido-card.entregado {
+    background: var(--green-light);
+    border-color: var(--green);
+    opacity: 0.75;
+  }
+
+  .pedido-card.entregado .producto-name {
+    text-decoration: line-through;
+    color: var(--gray);
+  }
+
+  .pedido-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 10px;
+  }
+
+  .pedido-info { flex: 1; }
+
+  .cliente-name {
+    font-weight: 600;
+    font-size: 16px;
+    color: var(--brown);
+    line-height: 1.2;
+  }
+
+  .producto-name {
+    font-size: 14px;
+    color: var(--gray);
+    margin-top: 4px;
+    line-height: 1.3;
+  }
+
+  .cantidad-badge {
+    background: var(--caramel-light);
+    color: var(--caramel);
+    font-weight: 700;
+    font-size: 13px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    flex-shrink: 0;
+  }
+
+  .pedido-meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px solid var(--cream);
+  }
+
+  .celular {
+    font-size: 13px;
+    color: var(--gray);
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  .btn-entregar {
+    width: 100%;
+    margin-top: 12px;
+    padding: 12px;
+    background: var(--brown);
+    color: var(--white);
+    border: none;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .btn-entregar:active { transform: scale(0.97); }
+
+  .btn-entregar:hover { background: var(--caramel); }
+
+  .entregado-label {
+    display: none;
+    width: 100%;
+    margin-top: 12px;
+    padding: 10px;
+    background: var(--green);
+    color: var(--white);
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .pedido-card.entregado .btn-entregar { display: none; }
+  .pedido-card.entregado .entregado-label { display: flex; }
+
+  .hora-entrega {
+    font-size: 12px;
+    opacity: 0.8;
+    font-weight: 400;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--gray);
+  }
+
+  .empty-state .icon { font-size: 48px; margin-bottom: 12px; }
+  .empty-state p { font-size: 16px; }
+
+  #loading {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--gray);
+    font-size: 15px;
+  }
+
+  .spinner {
+    width: 32px; height: 32px;
+    border: 3px solid var(--caramel-light);
+    border-top-color: var(--caramel);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin: 0 auto 16px;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .config-banner {
+    background: var(--caramel-light);
+    border: 1.5px dashed var(--caramel);
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    color: var(--brown);
+    line-height: 1.5;
+  }
+
+  .config-banner strong { display: block; margin-bottom: 4px; font-size: 14px; }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-circle">P</div>
+  <div class="header-text">
+    <h1 id="tienda-nombre">Cargando...</h1>
+    <p id="header-fecha">—</p>
+  </div>
+</header>
+
+<div class="stats-bar">
+  <div class="stat">
+    <div class="stat-num" id="stat-total">—</div>
+    <div class="stat-label">Total</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num" id="stat-pendientes">—</div>
+    <div class="stat-label">Pendientes</div>
+  </div>
+  <div class="stat">
+    <div class="stat-num" id="stat-entregados">—</div>
+    <div class="stat-label">Entregados</div>
+  </div>
+</div>
+
+<div class="content">
+  <div id="loading">
+    <div class="spinner"></div>
+    Cargando pedidos...
+  </div>
+  <div id="lista" style="display:none"></div>
+</div>
+
+<script>
+// ── CONFIGURACIÓN ─────────────────────────────────────────────────────────
+// Estos valores se reemplazan por el script Python al generar la app
+const CONFIG = {
+  SHEET_ID:    '1csosJym8w6EzXOYAk744BQ9pXfPP3Gs0vvb8aqLcGPc',
+  TIENDA:      'PADRE HURTADO',
+  SHEET_NAME:  'PADRE HURTADO',
+  API_KEY:     'AIzaSyDyuY1WshQFh2BFJ3kqzTxAD2rje_EsIrE',
+};
+// ─────────────────────────────────────────────────────────────────────────
+
+const DIAS = ['domingo','lunes','martes','miércoles','jueves','viernes','sábado'];
+const MESES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
+
+function hoy() {
+  const d = new Date();
+  return `${DIAS[d.getDay()]} ${d.getDate()} de ${MESES[d.getMonth()]}`;
+}
+
+function ahora() {
+  const d = new Date();
+  return d.toLocaleTimeString('es-CL', {hour:'2-digit', minute:'2-digit'});
+}
+
+// Lee el Sheet via Google Sheets API (lectura pública con API key)
+async function cargarPedidos() {
+  const url = `https://sheets.googleapis.com/v4/spreadsheets/${CONFIG.SHEET_ID}/values/${encodeURIComponent(CONFIG.SHEET_NAME)}!A:F?key=${CONFIG.API_KEY}`;
+  const res = await fetch(url);
+  const data = await res.json();
+  return data.values || [];
+}
+
+// Escribe el estado de entrega via Apps Script Web App
+async function marcarEntregado(rowIndex, hora) {
+  const url = CONFIG.APPS_SCRIPT_URL;
+  await fetch(url, {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      sheetId:   CONFIG.SHEET_ID,
+      sheetName: CONFIG.SHEET_NAME,
+      row:       rowIndex + 1, // 1-indexed, +1 por header
+      hora:      hora,
+    }),
+  });
+}
+
+function renderPedidos(rows) {
+  const lista = document.getElementById('lista');
+  const loading = document.getElementById('loading');
+
+  // Primera fila es header
+  const pedidos = rows.slice(1);
+
+  document.getElementById('tienda-nombre').textContent = 'Tienda ' + CONFIG.TIENDA.charAt(0) + CONFIG.TIENDA.slice(1).toLowerCase();
+  document.getElementById('header-fecha').textContent = hoy();
+
+  loading.style.display = 'none';
+  lista.style.display = 'block';
+
+  if (pedidos.length === 0) {
+    lista.innerHTML = `<div class="empty-state"><div class="icon">🎂</div><p>No hay retiros para hoy</p></div>`;
+    actualizarStats(0, 0);
+    return;
+  }
+
+  lista.innerHTML = '';
+
+  pedidos.forEach((row, i) => {
+    const [estado, cantidad, producto, cliente, celular, entregadoHora] = row;
+    const yaEntregado = entregadoHora && entregadoHora.trim() !== '';
+
+    const card = document.createElement('div');
+    card.className = 'pedido-card' + (yaEntregado ? ' entregado' : '');
+    card.dataset.index = i + 1; // +1 por header
+
+    card.innerHTML = `
+      <div class="pedido-top">
+        <div class="pedido-info">
+          <div class="cliente-name">${cliente || '—'}</div>
+          <div class="producto-name">${cantidad || '1'}x ${producto || '—'}</div>
+        </div>
+        <div class="cantidad-badge">×${cantidad || '1'}</div>
+      </div>
+      <div class="pedido-meta">
+        <span class="celular">📱 ${celular || '—'}</span>
+      </div>
+      <button class="btn-entregar" onclick="entregar(this, ${i + 1})">
+        ✓ &nbsp; Marcar como entregado
+      </button>
+      <div class="entregado-label">
+        ✓ Entregado <span class="hora-entrega">${yaEntregado ? '· ' + entregadoHora : ''}</span>
+      </div>
+    `;
+    lista.appendChild(card);
+  });
+
+  actualizarStats(pedidos.length, pedidos.filter(r => r[5] && r[5].trim()).length);
+}
+
+function actualizarStats(total, entregados) {
+  document.getElementById('stat-total').textContent = total;
+  document.getElementById('stat-pendientes').textContent = total - entregados;
+  document.getElementById('stat-entregados').textContent = entregados;
+}
+
+async function entregar(btn, rowIndex) {
+  const card = btn.closest('.pedido-card');
+  const hora = ahora();
+  btn.disabled = true;
+  btn.textContent = 'Guardando...';
+
+  try {
+    await marcarEntregado(rowIndex, hora);
+    card.classList.add('entregado');
+    card.querySelector('.entregado-label .hora-entrega').textContent = '· ' + hora;
+
+    // Recalcular stats
+    const total = parseInt(document.getElementById('stat-total').textContent);
+    const entregados = parseInt(document.getElementById('stat-entregados').textContent) + 1;
+    actualizarStats(total, entregados);
+  } catch(e) {
+    btn.disabled = false;
+    btn.textContent = '✓  Marcar como entregado';
+    alert('Error al guardar. Verifica tu conexión.');
+  }
+}
+
+// Iniciar
+cargarPedidos().then(renderPedidos).catch(err => {
+  document.getElementById('loading').innerHTML = `
+    <div style="color:#C1121F; padding: 20px; background: #FFE5E7; border-radius: 12px;">
+      <strong>Error al cargar pedidos</strong><br>
+      <small>${err.message}</small>
+    </div>`;
+});
+</script>
+</body>
+</html>
