@@ -340,11 +340,12 @@ async function marcarEntregado(rowIndex, hora) {
   const url = CONFIG.APPS_SCRIPT_URL;
   await fetch(url, {
     method: 'POST',
-    headers: {'Content-Type': 'application/json'},
+    mode: 'no-cors',
+    headers: {'Content-Type': 'text/plain'},
     body: JSON.stringify({
       sheetId:   CONFIG.SHEET_ID,
       sheetName: CONFIG.SHEET_NAME,
-      row:       rowIndex + 1, // 1-indexed, +1 por header
+      row:       rowIndex,
       hora:      hora,
     }),
   });
@@ -415,19 +416,18 @@ async function entregar(btn, rowIndex) {
   btn.disabled = true;
   btn.textContent = 'Guardando...';
 
+  // Actualizar UI inmediatamente (no esperamos respuesta por CORS)
+  card.classList.add('entregado');
+  card.querySelector('.entregado-label .hora-entrega').textContent = '· ' + hora;
+  const total = parseInt(document.getElementById('stat-total').textContent);
+  const entregados = parseInt(document.getElementById('stat-entregados').textContent) + 1;
+  actualizarStats(total, entregados);
+
+  // Enviar al servidor en segundo plano
   try {
     await marcarEntregado(rowIndex, hora);
-    card.classList.add('entregado');
-    card.querySelector('.entregado-label .hora-entrega').textContent = '· ' + hora;
-
-    // Recalcular stats
-    const total = parseInt(document.getElementById('stat-total').textContent);
-    const entregados = parseInt(document.getElementById('stat-entregados').textContent) + 1;
-    actualizarStats(total, entregados);
   } catch(e) {
-    btn.disabled = false;
-    btn.textContent = '✓  Marcar como entregado';
-    alert('Error al guardar. Verifica tu conexión.');
+    console.log('Error al guardar:', e);
   }
 }
 
