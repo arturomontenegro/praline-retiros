@@ -337,17 +337,15 @@ async function cargarPedidos() {
 
 // Escribe el estado de entrega via Apps Script Web App
 async function marcarEntregado(rowIndex, hora) {
-  const url = CONFIG.APPS_SCRIPT_URL;
-  await fetch(url, {
-    method: 'POST',
+  const params = new URLSearchParams({
+    sheetId:   CONFIG.SHEET_ID,
+    sheetName: CONFIG.SHEET_NAME,
+    row:       rowIndex,
+    hora:      hora,
+  });
+  await fetch(CONFIG.APPS_SCRIPT_URL + '?' + params.toString(), {
+    method: 'GET',
     mode: 'no-cors',
-    headers: {'Content-Type': 'text/plain'},
-    body: JSON.stringify({
-      sheetId:   CONFIG.SHEET_ID,
-      sheetName: CONFIG.SHEET_NAME,
-      row:       rowIndex,
-      hora:      hora,
-    }),
   });
 }
 
