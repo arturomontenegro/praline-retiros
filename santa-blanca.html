@@ -311,6 +311,7 @@ const CONFIG = {
   TIENDA:      'SANTA BLANCA',
   SHEET_NAME:  'SANTA BLANCA',
   API_KEY:     'AIzaSyDyuY1WshQFh2BFJ3kqzTxAD2rje_EsIrE',
+  APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbxIYQJjgHmIEJ2k8_HYGBo3hU8kJS1y25nS19ouSXVu3_0qt3psMYnu4g2V9Q6BEsk7/exec',
 };
 // ─────────────────────────────────────────────────────────────────────────
 
@@ -336,16 +337,23 @@ async function cargarPedidos() {
 }
 
 // Escribe el estado de entrega via Apps Script Web App
-async function marcarEntregado(rowIndex, hora) {
-  const params = new URLSearchParams({
-    sheetId:   CONFIG.SHEET_ID,
-    sheetName: CONFIG.SHEET_NAME,
-    row:       rowIndex,
-    hora:      hora,
-  });
-  await fetch(CONFIG.APPS_SCRIPT_URL + '?' + params.toString(), {
-    method: 'GET',
-    mode: 'no-cors',
+function marcarEntregado(rowIndex, hora) {
+  return new Promise((resolve) => {
+    const params = new URLSearchParams({
+      sheetId:   CONFIG.SHEET_ID,
+      sheetName: CONFIG.SHEET_NAME,
+      row:       rowIndex,
+      hora:      hora,
+    });
+    const url = CONFIG.APPS_SCRIPT_URL + '?' + params.toString();
+    const iframe = document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.src = url;
+    iframe.onload = () => { document.body.removeChild(iframe); resolve(); };
+    iframe.onerror = () => { document.body.removeChild(iframe); resolve(); };
+    document.body.appendChild(iframe);
+    // Resolver después de 3 segundos como máximo
+    setTimeout(resolve, 3000);
   });
 }
 
